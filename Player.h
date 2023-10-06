@@ -15,6 +15,9 @@ class Player {
 
 	void Draw(ViewProjection& viewProjection);
 
+	//移動処理
+	void Move();
+
 	private:
 
 	//ワールド変換データ
