@@ -10,6 +10,7 @@
 #include "WorldTransform.h"
 
 #include "Player.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,7 +53,11 @@ private: // メンバ変数
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	//3Dモデル
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_;
+	//スカイドーム
+	std::unique_ptr<Skydome> skydome_;
+	//スカイドームの3Dモデル
+	std::unique_ptr<Model> modelskydome_;
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -60,7 +65,7 @@ private: // メンバ変数
 	WorldTransform worldTransform_;
 
 	//自キャラ
-	Player* player_ = nullptr;
+	std::unique_ptr<Player> player_;
 
 
 	/// <summary>

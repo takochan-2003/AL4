@@ -19,6 +19,7 @@ void Player::Update() {
 	//行列を更新
 	worldTransform_.UpdateMatrix();
 
+	//移動処理
 	Move();
 
 	//ワールド行列の更新

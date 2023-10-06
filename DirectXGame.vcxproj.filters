@@ -61,6 +61,18 @@
     <Filter Include="ソース ファイル\worldTransformEX">
       <UniqueIdentifier>{116c0bb3-2519-4345-afc6-6046d32da1e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\skydome">
+      <UniqueIdentifier>{a7e84db1-91d7-4239-9429-cfaf0f1864c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\skydome">
+      <UniqueIdentifier>{0f4cbacc-068e-45f2-bbaf-ee04a07d04db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ground">
+      <UniqueIdentifier>{938d1e47-266b-4293-a467-ac10f05e447c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ground">
+      <UniqueIdentifier>{7a91fb81-3f36-45d8-b0bc-37f2b421103c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="WorldTransformEX.cpp">
       <Filter>ソース ファイル\worldTransformEX</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>ソース ファイル\skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>ソース ファイル\ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="compute.h">
       <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>ヘッダー ファイル\skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>ヘッダー ファイル\ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
