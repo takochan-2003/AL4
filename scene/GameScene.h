@@ -8,9 +8,13 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "DebugCamera.h"
+
+#include <memory>
 
 #include "Player.h"
 #include "Skydome.h"
+#include"Ground.h"
 
 /// <summary>
 /// ゲームシーン
@@ -48,6 +52,11 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+	// デバッグカメラ
+	std::unique_ptr<DebugCamera> debugCamera_; 
+
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//スプライト
@@ -66,6 +75,13 @@ private: // メンバ変数
 
 	//自キャラ
 	std::unique_ptr<Player> player_;
+	//自キャラの3Dモデル
+	std::unique_ptr<Model> modelPlayer_;
+
+	// 地面
+	std::unique_ptr<Ground> ground_;
+	// 3Dモデル
+	std::unique_ptr<Model> modelGround_;
 
 
 	/// <summary>

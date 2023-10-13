@@ -1,15 +1,20 @@
 ﻿#include "Player.h"
 #include <cassert>
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model, uint32_t textureHndle) {
 	//NULLポインタチェック
 	assert(model);
 	//引数からデータを受け取る
 	model_ = model;
-	textureHandle_ = textureHandle;
+	
+	textureHandle_ = textureHndle;
 	
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
+
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
 
 	//シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
