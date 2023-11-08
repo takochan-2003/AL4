@@ -79,6 +79,11 @@ void Player::JoyMove() {
 
 		move = TransformNormal(move, rotateXYZMatrix);
 
+		
+		if (move.z != 0 || move.y != 0) {
+			worldTransform_.rotation_.y = std::atan2(move.x, move.z);
+		}
+
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 	}
 
