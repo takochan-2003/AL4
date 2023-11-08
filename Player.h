@@ -15,10 +15,23 @@ class Player {
 
 	void Draw(ViewProjection& viewProjection);
 
+	void SetViewProjection(const ViewProjection* viewProjection) {
+		viewProjection_ = viewProjection;
+	}
+
 	//移動処理
-	void Move();
+	void KeyMove();
+	void JoyMove();
+
+	//ワールドトランスフォーム取得
+	const WorldTransform& GetWorldTransform();
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 	private:
+	//カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;

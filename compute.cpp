@@ -178,6 +178,14 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
+Vector3 Multiply(Vector3 vector1, float k) {
+	Vector3 result;
+	result.x = vector1.x * k;
+	result.y = vector1.y * k;
+	result.z = vector1.z * k;
+	return result;
+}
+
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
 	Matrix4x4 result;
@@ -312,5 +320,22 @@ Matrix4x4 Inverse(const Matrix4x4& m1) {
 	                  m1.m[0][1] * m1.m[1][0] * m1.m[2][2] - m1.m[0][0] * m1.m[1][2] * m1.m[2][1]) *
 	                 deterninantRect;
 
+	return result;
+}
+
+float Length2(Vector3 v) {
+	float result;
+	result = sqrtf(Dot(v, v));
+	return result;
+}
+
+Vector3 Normalize2(const Vector3& v) { 
+	float len = Length(v);
+	Vector3 result = v;
+	if (len != 0) {
+		result.x = result.x / len;
+		result.y = result.y / len;
+		result.z = result.z / len;
+	}
 	return result;
 }

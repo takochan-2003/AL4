@@ -73,6 +73,12 @@
     <Filter Include="ヘッダー ファイル\ground">
       <UniqueIdentifier>{7a91fb81-3f36-45d8-b0bc-37f2b421103c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\followCamera">
+      <UniqueIdentifier>{edcef1c6-727a-436a-a92c-ba7ab5b31efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\followCamera">
+      <UniqueIdentifier>{d9a9128f-fd67-475e-b7cf-176015387cd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="Ground.cpp">
       <Filter>ソース ファイル\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCamera.cpp">
+      <Filter>ソース ファイル\followCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="Ground.h">
       <Filter>ヘッダー ファイル\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h">
+      <Filter>ヘッダー ファイル\followCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

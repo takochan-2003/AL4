@@ -1,13 +1,11 @@
 #include "GameScene.h"
+#include "AxisIndicator.h"
 #include "TextureManager.h"
 #include <cassert>
-#include "AxisIndicator.h"
 
-GameScene::GameScene() {
+GameScene::GameScene() {}
 
-}
-
-GameScene::~GameScene() { }
+GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
@@ -16,31 +14,30 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// ファイル名を指定してテクスチャを読み込む
-	//textureHandle_ = TextureManager::Load("tex1.png");
-	//スプライトの生成
+	// textureHandle_ = TextureManager::Load("tex1.png");
+	// スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, {50, 50});
-	//3Dモデルの生成
+	// 3Dモデルの生成
 	model_.reset(Model::Create());
 
-
-	//ワールドトランスフォームの初期化
+	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	//ビュープロジェクションの初期化
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	//プレイヤーの読み込み
+	// プレイヤーの読み込み
 	modelPlayer_.reset(Model::CreateFromOBJ("playerModel", true));
-	//自キャラの生成
+	// 自キャラの生成
 	player_ = std::make_unique<Player>();
-	//自キャラの初期化
-	player_->Initialize(modelPlayer_.get(),textureHandle_);
+	// 自キャラの初期化
+	player_->Initialize(modelPlayer_.get(), textureHandle_);
 
-	//スカイドームの読み込み
+	// スカイドームの読み込み
 	modelskydome_.reset(Model::CreateFromOBJ("skydome", true));
-	//スカイドームの生成
+	// スカイドームの生成
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelskydome_.get(), textureHandle_);
-	
+
 	// 地面
 	//   3Dモデルの生成
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
@@ -49,7 +46,17 @@ void GameScene::Initialize() {
 	// 地面の初期化
 	ground_->Initialize(modelGround_.get());
 
-	#ifdef _DEBUG
+	// カメラの生成
+	followCamera_ = std::make_unique<FollowCamera>();
+	// カメラの初期化
+	followCamera_->Initialize();
+	// 自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+
+	//自キャラに追従カメラをアドレス渡し
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
+
+#ifdef _DEBUG
 
 	// デバッグカメラの生成
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
@@ -59,11 +66,9 @@ void GameScene::Initialize() {
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 #endif // _DEBUG
-
 }
 
-
-void GameScene::Update() { 
+void GameScene::Update() {
 
 	// デバッグカメラの更新
 	debugCamera_->Update();
@@ -85,8 +90,14 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
+
+		followCamera_->Update();
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		// viewProjection_.UpdateMatrix();
 	}
 #endif // _DEBUG
 
@@ -123,13 +134,13 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	//プレイヤーの描画
+	// プレイヤーの描画
 	player_->Draw(viewProjection_);
 
-	//天球の描画
+	// 天球の描画
 	skydome_->Draw(viewProjection_);
 
-	//床の描画
+	// 床の描画
 	ground_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
