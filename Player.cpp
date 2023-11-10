@@ -1,11 +1,19 @@
 ﻿#include "Player.h"
 #include <cassert>
+#define _USE_MATH_DEFINES
+#include<math.h>
 
 void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm) {
 	// NULLポインタチェック
-	assert(model);
+	assert(modelBody);
+	assert(modelHead);
+	assert(modelL_arm);
+	assert(modelR_arm);
 	// 引数からデータを受け取る
-	model_ = model;
+	modelFighterBody_ = modelBody;
+	modelFighterHead_ = modelHead;
+	modelFighterL_arm_ = modelL_arm;
+	modelFighterR_arm_ = modelR_arm;
 
 
 	// ワールド変換の初期化
@@ -18,18 +26,43 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
+	InitializeFloattingGimmick();
 }
 void Player::Update() {
 
 	// 移動処理
 	// KeyMove();
 	JoyMove();
-
+	UpdateFlotingGimmick();
 }
 void Player::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	modelFighterBody_->Draw(worldTransform_, viewProjection);
+	modelFighterHead_->Draw(worldTransform_, viewProjection);
+	modelFighterL_arm_->Draw(worldTransform_, viewProjection);
+	modelFighterR_arm_->Draw(worldTransform_, viewProjection);
 }
 
+
+void Player::InitializeFloattingGimmick() { floatingParameter_ = 0.0f; }
+
+void Player::UpdateFlotingGimmick() {
+	//フレーム
+	const int frame = 120;
+	//浮遊移動のサクル<frame>
+	const uint16_t period = frame;
+	//1フレームでのパラメーター加算値
+	const float step = 2.0f * 3.14f / period;
+
+	//パラメーターを1ステップ分加算
+	floatingParameter_ += step;
+	//2πを超えたら0に戻す
+	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * 3.14f);
+
+	//浮遊の振幅
+	const float floatingPower = 0.2f;
+	//浮遊を座標に反映
+	worldTransform_.translation_.y = std::sin(floatingParameter_) * floatingPower;
+}
 
 void Player::KeyMove() {
 	// キャラクターの移動ベクトル
@@ -93,6 +126,7 @@ void Player::JoyMove() {
 	// 行列を更新
 	worldTransform_.UpdateMatrix();
 }
+
 
 const WorldTransform& Player::GetWorldTransform() { return worldTransform_; }
 

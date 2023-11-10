@@ -19,6 +19,12 @@ class Player {
 		viewProjection_ = viewProjection;
 	}
 
+	//浮遊ギミック初期化
+	void InitializeFloattingGimmick();
+
+	//浮遊ギミック更新
+	void UpdateFlotingGimmick();
+
 	//移動処理
 	void KeyMove();
 	void JoyMove();
@@ -35,8 +41,7 @@ class Player {
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
-	//モデル
-	Model* model_ = nullptr;
+
 	//1-4の各パーツ毎の3Dモデル
 	Model* modelFighterBody_ = nullptr;
 	Model* modelFighterHead_ = nullptr;
@@ -47,4 +52,10 @@ class Player {
 
 	//キーボード入力
 	Input* input_ = nullptr;
+
+	private:
+	//浮遊ギミックの媒介変数
+	   float floatingParameter_ = 0.0f;
+
+
 };
