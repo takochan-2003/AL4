@@ -25,12 +25,15 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	// プレイヤーの読み込み
-	modelPlayer_.reset(Model::CreateFromOBJ("playerModel", true));
+	//プレイヤーの3Dモデル読み込み
+	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
 	// 自キャラの生成
 	player_ = std::make_unique<Player>();
 	// 自キャラの初期化
-	player_->Initialize(modelPlayer_.get(), textureHandle_);
+	player_->Initialize(modelFighterBody_.get(),modelFighterHead_.get(),modelFighterL_arm_.get(),modelFighterR_arm_.get());
 
 	// スカイドームの読み込み
 	modelskydome_.reset(Model::CreateFromOBJ("skydome", true));

@@ -64,6 +64,13 @@ private: // メンバ変数
 	Sprite* sprite_ = nullptr;
 	//3Dモデル
 	std::unique_ptr<Model> model_;
+
+	//1-4各パーツごとの3Dモデル
+	std::unique_ptr<Model> modelFighterBody_;
+	std::unique_ptr<Model> modelFighterHead_;
+	std::unique_ptr<Model> modelFighterL_arm_;
+	std::unique_ptr<Model> modelFighterR_arm_;
+
 	//スカイドーム
 	std::unique_ptr<Skydome> skydome_;
 	//スカイドームの3Dモデル
@@ -76,8 +83,6 @@ private: // メンバ変数
 
 	//自キャラ
 	std::unique_ptr<Player> player_;
-	//自キャラの3Dモデル
-	std::unique_ptr<Model> modelPlayer_;
 
 	// 地面
 	std::unique_ptr<Ground> ground_;
