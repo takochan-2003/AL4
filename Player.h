@@ -25,6 +25,9 @@ class Player {
 	//浮遊ギミック更新
 	void UpdateFlotingGimmick();
 
+	//
+	void SetParent(const WorldTransform* parent);
+
 	//移動処理
 	void KeyMove();
 	void JoyMove();
@@ -42,6 +45,12 @@ class Player {
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
+	//自機のワールドデータ
+	WorldTransform worldTransformArm_L_;
+	WorldTransform worldTransformArm_R_;
+	WorldTransform worldTransformBody_;
+	WorldTransform worldTransformHead_;
+
 	//1-4の各パーツ毎の3Dモデル
 	Model* modelFighterBody_ = nullptr;
 	Model* modelFighterHead_ = nullptr;
@@ -56,6 +65,5 @@ class Player {
 	private:
 	//浮遊ギミックの媒介変数
 	   float floatingParameter_ = 0.0f;
-
 
 };

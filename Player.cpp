@@ -18,11 +18,26 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+	worldTransformArm_R_.Initialize();
+	worldTransformArm_L_.Initialize();
+	worldTransformBody_.Initialize();
+	worldTransformHead_.Initialize();
 	//ビュープロジェクションの初期化
 
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+
+	//親子関係を結ぶ
+	//worldTransformP_=SetParent(&GetWorldTransform());
+
+	//ズラす量
+	Vector3 BodyPosition(0.0f, 3.0f, 0.0f);
+	Vector3 HeadPosition(0.0f, 5.0f, 0.0f);
+	Vector3 L_armPosition(0.0f, 3.0f, 2.0f);
+	Vector3 R_armPosition(0.0f, 3.0f, -2.0f);
+
+	
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -34,12 +49,25 @@ void Player::Update() {
 	// KeyMove();
 	JoyMove();
 	UpdateFlotingGimmick();
+
+	//親と子の座標を合わせる
+	worldTransformBody_.parent_ = &worldTransform_;
+	worldTransformArm_L_.parent_ = &worldTransformBody_;
+	worldTransformArm_R_.parent_ = &worldTransformBody_;
+	worldTransformHead_.parent_ = &worldTransformBody_;
+
+	worldTransform_.UpdateMatrix();
+	worldTransformArm_R_.UpdateMatrix();
+	worldTransformArm_L_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+
 }
 void Player::Draw(ViewProjection& viewProjection) {
-	modelFighterBody_->Draw(worldTransform_, viewProjection);
-	modelFighterHead_->Draw(worldTransform_, viewProjection);
-	modelFighterL_arm_->Draw(worldTransform_, viewProjection);
-	modelFighterR_arm_->Draw(worldTransform_, viewProjection);
+	modelFighterBody_->Draw(worldTransformBody_, viewProjection);
+	modelFighterHead_->Draw(worldTransformHead_, viewProjection);
+	modelFighterL_arm_->Draw(worldTransformArm_L_, viewProjection);
+	modelFighterR_arm_->Draw(worldTransformArm_R_, viewProjection);
 }
 
 
@@ -129,6 +157,11 @@ void Player::JoyMove() {
 
 
 const WorldTransform& Player::GetWorldTransform() { return worldTransform_; }
+
+void Player::SetParent(const WorldTransform* parent) {
+	//親子関係を結ぶ
+	worldTransform_.parent_ = parent;
+}
 
 Vector3 Player::GetWorldPosition() {
 	Vector3 worldPos;
