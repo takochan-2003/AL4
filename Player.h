@@ -19,6 +19,8 @@ class Player {
 		viewProjection_ = viewProjection;
 	}
 
+	void ImGui();
+
 	//浮遊ギミック初期化
 	void InitializeFloattingGimmick();
 

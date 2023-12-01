@@ -2,6 +2,7 @@
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include<math.h>
+#include<ImGuimanager.h>
 
 void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm) {
 	// NULLポインタチェック
@@ -16,28 +17,30 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 	modelFighterR_arm_ = modelR_arm;
 
 
+	//ビュープロジェクションの初期化
+
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 2.0f, 0.0f};
+
+	worldTransformArm_R_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransformArm_R_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransformArm_R_.translation_ = {0.6f, 1.0f, 0.0f};
+
+	worldTransformArm_L_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransformArm_L_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransformArm_L_.translation_ = {-0.6f, 1.0f, 0.0f};
+
+	worldTransformHead_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransformHead_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransformHead_.translation_ = {0.0f, 1.4f, 0.0f};
+	
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransformArm_R_.Initialize();
 	worldTransformArm_L_.Initialize();
 	worldTransformBody_.Initialize();
 	worldTransformHead_.Initialize();
-	//ビュープロジェクションの初期化
-
-	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
-	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
-	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
-
-	//親子関係を結ぶ
-	//worldTransformP_=SetParent(&GetWorldTransform());
-
-	//ズラす量
-	Vector3 BodyPosition(0.0f, 3.0f, 0.0f);
-	Vector3 HeadPosition(0.0f, 5.0f, 0.0f);
-	Vector3 L_armPosition(0.0f, 3.0f, 2.0f);
-	Vector3 R_armPosition(0.0f, 3.0f, -2.0f);
-
-	
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -56,20 +59,62 @@ void Player::Update() {
 	worldTransformArm_R_.parent_ = &worldTransformBody_;
 	worldTransformHead_.parent_ = &worldTransformBody_;
 
+	//ImGui();
+
 	worldTransform_.UpdateMatrix();
-	worldTransformArm_R_.UpdateMatrix();
-	worldTransformArm_L_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformHead_.UpdateMatrix();
+	worldTransformArm_R_.UpdateMatrix();
+	worldTransformArm_L_.UpdateMatrix();
 
 }
 void Player::Draw(ViewProjection& viewProjection) {
+
 	modelFighterBody_->Draw(worldTransformBody_, viewProjection);
 	modelFighterHead_->Draw(worldTransformHead_, viewProjection);
 	modelFighterL_arm_->Draw(worldTransformArm_L_, viewProjection);
 	modelFighterR_arm_->Draw(worldTransformArm_R_, viewProjection);
+
 }
 
+
+void Player::ImGui() {
+	float head[3] = {
+	    worldTransformHead_.translation_.x,
+		worldTransformHead_.translation_.y,
+	    worldTransformHead_.translation_.z
+	};
+	float L_arm[3] = {
+	    worldTransformHead_.translation_.x,
+		worldTransformHead_.translation_.y,
+	    worldTransformHead_.translation_.z
+	};
+	float R_arm[3] = {
+	    worldTransformHead_.translation_.x,
+		worldTransformHead_.translation_.y,
+	    worldTransformHead_.translation_.z
+	};
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3("Head Translation", head, 100.0f, -100.0f);
+	ImGui::SliderFloat3("Larm Translation", L_arm, 100.0f, -100.0f);
+	ImGui::SliderFloat3("Rarm Translation", R_arm, 100.0f, -100.0f);
+
+	ImGui::End();
+
+	worldTransformHead_.translation_.x = head[0];
+	worldTransformHead_.translation_.y = head[1];
+	worldTransformHead_.translation_.z = head[2];
+
+	worldTransformArm_L_.translation_.x = L_arm[0];
+	worldTransformArm_L_.translation_.y = L_arm[1];
+	worldTransformArm_L_.translation_.z = L_arm[2];
+
+	worldTransformArm_R_.translation_.x = R_arm[0];
+	worldTransformArm_R_.translation_.y = R_arm[1];
+	worldTransformArm_R_.translation_.z = R_arm[2];
+
+}
 
 void Player::InitializeFloattingGimmick() { floatingParameter_ = 0.0f; }
 
@@ -89,7 +134,7 @@ void Player::UpdateFlotingGimmick() {
 	//浮遊の振幅
 	const float floatingPower = 0.2f;
 	//浮遊を座標に反映
-	worldTransform_.translation_.y = std::sin(floatingParameter_) * floatingPower;
+	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * floatingPower;
 }
 
 void Player::KeyMove() {
@@ -147,12 +192,6 @@ void Player::JoyMove() {
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 	}
 
-	// move.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX * kCharacterSpeed;
-	// move.z += (float)joyState.Gamepad.sThumbLY / SHRT_MAX * kCharacterSpeed;
-	//// 座標移動(ベクトルの加算)
-	// worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-	// 行列を更新
-	worldTransform_.UpdateMatrix();
 }
 
 
