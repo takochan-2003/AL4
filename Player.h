@@ -4,8 +4,9 @@
 #include "Model.h"
 #include "Input.h"
 #include "compute.h"
+#include "BaseCharacter.h"
 
-class Player {
+class Player : public BaseCharacter {
 
 	public:
 

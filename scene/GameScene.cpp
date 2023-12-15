@@ -20,6 +20,8 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_.reset(Model::Create());
 
+	
+
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化

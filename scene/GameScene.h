@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "Player.h"
+#include"BaseCharacter.h"
 #include "Skydome.h"
 #include"Ground.h"
 #include"FollowCamera.h"
