@@ -79,6 +79,12 @@
     <Filter Include="ヘッダー ファイル\followCamera">
       <UniqueIdentifier>{d9a9128f-fd67-475e-b7cf-176015387cd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\enemy">
+      <UniqueIdentifier>{5a55bf10-9e30-429d-8209-2424cfad6b6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\enemy">
+      <UniqueIdentifier>{9f2f451c-2a6d-428c-a3d7-6071f2c8d863}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="BaseCharacter.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="BaseCharacter.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

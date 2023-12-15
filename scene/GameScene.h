@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "Player.h"
+#include"Enemy.h"
 #include"BaseCharacter.h"
 #include "Skydome.h"
 #include"Ground.h"
@@ -72,6 +73,12 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
 
+	//敵の3Dモデル
+	std::unique_ptr<Model> modelNeedleBody_;
+	std::unique_ptr<Model> modelNeedleL_arm_;
+	std::unique_ptr<Model> modelNeedleR_arm_;
+
+
 	//スカイドーム
 	std::unique_ptr<Skydome> skydome_;
 	//スカイドームの3Dモデル
@@ -84,6 +91,9 @@ private: // メンバ変数
 
 	//自キャラ
 	std::unique_ptr<Player> player_;
+
+	//敵キャラ
+	std::unique_ptr<Enemy> enemy_;
 
 	// 地面
 	std::unique_ptr<Ground> ground_;

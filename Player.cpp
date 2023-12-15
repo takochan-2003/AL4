@@ -4,17 +4,19 @@
 #include<math.h>
 #include<ImGuimanager.h>
 
-void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm) {
-	// NULLポインタチェック
-	assert(modelBody);
-	assert(modelHead);
-	assert(modelL_arm);
-	assert(modelR_arm);
-	// 引数からデータを受け取る
-	modelFighterBody_ = modelBody;
-	modelFighterHead_ = modelHead;
-	modelFighterL_arm_ = modelL_arm;
-	modelFighterR_arm_ = modelR_arm;
+void Player::Initialize(const std::vector<Model*>& models) {
+	//// NULLポインタチェック
+	//assert(modelBody);
+	//assert(modelHead);
+	//assert(modelL_arm);
+	//assert(modelR_arm);
+	//// 引数からデータを受け取る
+	//modelFighterBody_ = modelBody;
+	//modelFighterHead_ = modelHead;
+	//modelFighterL_arm_ = modelL_arm;
+	//modelFighterR_arm_ = modelR_arm;
+
+	BaseCharacter::Initialize(models);
 
 
 	//ビュープロジェクションの初期化
@@ -53,6 +55,8 @@ void Player::Update() {
 	JoyMove();
 	UpdateFlotingGimmick();
 
+
+
 	//親と子の座標を合わせる
 	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformArm_L_.parent_ = &worldTransformBody_;
@@ -68,12 +72,17 @@ void Player::Update() {
 	worldTransformArm_L_.UpdateMatrix();
 
 }
-void Player::Draw(ViewProjection& viewProjection) {
+void Player::Draw(const ViewProjection& viewProjection) {
 
-	modelFighterBody_->Draw(worldTransformBody_, viewProjection);
-	modelFighterHead_->Draw(worldTransformHead_, viewProjection);
-	modelFighterL_arm_->Draw(worldTransformArm_L_, viewProjection);
-	modelFighterR_arm_->Draw(worldTransformArm_R_, viewProjection);
+	//modelFighterBody_->Draw(worldTransformBody_, viewProjection);
+	//modelFighterHead_->Draw(worldTransformHead_, viewProjection);
+	//modelFighterL_arm_->Draw(worldTransformArm_L_, viewProjection);
+	//modelFighterR_arm_->Draw(worldTransformArm_R_, viewProjection);
+
+	models_[0]->Draw(worldTransformBody_, viewProjection);
+	models_[1]->Draw(worldTransformHead_, viewProjection);
+	models_[2]->Draw(worldTransformArm_L_, viewProjection);
+	models_[3]->Draw(worldTransformArm_R_, viewProjection);
 
 }
 

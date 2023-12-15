@@ -13,8 +13,12 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	// ファイル名を指定してテクスチャを読み込む
-	// textureHandle_ = TextureManager::Load("tex1.png");
+
+
+
+
+
+	
 	// スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, {50, 50});
 	// 3Dモデルの生成
@@ -32,10 +36,33 @@ void GameScene::Initialize() {
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+
+		// 自キャラモデル
+	std::vector<Model*> playerModels = {
+	    modelFighterBody_.get(),
+		modelFighterHead_.get(),
+		modelFighterL_arm_.get(),
+	    modelFighterR_arm_.get()};
 	// 自キャラの生成
 	player_ = std::make_unique<Player>();
 	// 自キャラの初期化
-	player_->Initialize(modelFighterBody_.get(),modelFighterHead_.get(),modelFighterL_arm_.get(),modelFighterR_arm_.get());
+	player_->Initialize(playerModels);
+
+	//敵キャラの3Dモデル読み込み
+	modelNeedleBody_.reset(Model::CreateFromOBJ("needle_Body", true));
+	modelNeedleL_arm_.reset(Model::CreateFromOBJ("needle_L_arm", true));
+	modelNeedleR_arm_.reset(Model::CreateFromOBJ("needle_R_arm", true));
+
+		// 敵キャラモデル
+	std::vector<Model*> enemyModels = {
+	    modelNeedleBody_.get(),
+		modelNeedleL_arm_.get(),
+		modelNeedleR_arm_.get()};
+
+	//敵キャラの生成
+	enemy_ = std::make_unique<Enemy>();
+	//敵キャラの初期化
+	enemy_->Initialize(enemyModels);
 
 	// スカイドームの読み込み
 	modelskydome_.reset(Model::CreateFromOBJ("skydome", true));
@@ -110,6 +137,8 @@ void GameScene::Update() {
 
 	player_->Update();
 
+	enemy_->Update();
+
 	ground_->Update();
 }
 
@@ -141,6 +170,8 @@ void GameScene::Draw() {
 	/// </summary>
 	// プレイヤーの描画
 	player_->Draw(viewProjection_);
+
+	enemy_->Draw(viewProjection_);
 
 	// 天球の描画
 	skydome_->Draw(viewProjection_);
