@@ -18,6 +18,13 @@ public:
 
 	void SetParent(const WorldTransform* parent);
 
+	void EnemyMove(Vector3 position);
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	void ResetPosition();
+
 	// ワールドトランスフォーム取得
 	//const WorldTransform& GetWorldTransform();
 

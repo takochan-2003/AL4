@@ -41,6 +41,8 @@ class Player : public BaseCharacter {
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	void ResetPosition();
+
 	private:
 	//カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -68,5 +70,7 @@ class Player : public BaseCharacter {
 	private:
 	//浮遊ギミックの媒介変数
 	   float floatingParameter_ = 0.0f;
+
+	   float movePower = 0.0f;
 
 };

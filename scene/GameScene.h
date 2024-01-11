@@ -18,6 +18,7 @@
 #include "Skydome.h"
 #include"Ground.h"
 #include"FollowCamera.h"
+#include "Scene.h"
 
 /// <summary>
 /// ゲームシーン
@@ -50,6 +51,21 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void Timer();
+
+		// 衝突判定
+	void CheakAllCollisions();
+
+	// シーンのリセット
+	void sceneReset();
+
+	//void EnemyMove();
+
+	bool isSceneEnd = false;
+
+	bool IsSceneEnd() { return isSceneEnd; }
+	SceneType NextScene() {return SceneType::kTitle;	}
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -57,6 +73,13 @@ private: // メンバ変数
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
+
+	//ゲームオーバーのフラグ
+	bool isGameOver_ = false;
+	bool isGameClear_ = false;
+
+	//タイマー
+	int time = 0;
 	// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_; 
 
@@ -64,6 +87,12 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0u;
 	//スプライト
 	Sprite* sprite_ = nullptr;
+
+	Sprite* gameoverSprite_ = nullptr;
+	uint32_t gameover_ = 0;
+
+	Sprite* clearSprite_ = nullptr;
+	uint32_t gameclear_ = 0;
 	//3Dモデル
 	std::unique_ptr<Model> model_;
 

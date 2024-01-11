@@ -2,6 +2,7 @@
 #include "AxisIndicator.h"
 #include "TextureManager.h"
 #include <cassert>
+#include"ImGuiManager.h"
 
 GameScene::GameScene() {}
 
@@ -13,8 +14,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-
-
+	
 
 
 
@@ -24,6 +24,16 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_.reset(Model::Create());
 
+	//ゲームオーバー画面
+	gameover_ = TextureManager::Load("gameover.png");
+	// スプライト生成
+	gameoverSprite_ =
+	    Sprite::Create(gameover_, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+
+	// クリア画面
+	gameclear_ = TextureManager::Load("clear.png");
+	// スプライト生成
+	clearSprite_ = Sprite::Create(gameclear_, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
 	
 
 	// ワールドトランスフォームの初期化
@@ -102,8 +112,36 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	// デバッグカメラの更新
-	debugCamera_->Update();
+	// ゲームパッドの状態を得る変数
+	XINPUT_STATE joyState;
+
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		if (isGameOver_ == false) {
+			CheakAllCollisions();
+
+			enemy_->EnemyMove(player_->GetWorldPosition());
+
+			skydome_->Update();
+
+			player_->Update();
+
+			enemy_->Update();
+
+			ground_->Update();
+
+			Timer();
+
+			// デバッグカメラの更新
+			debugCamera_->Update();
+		} else if(isGameOver_==true||isGameClear_==true){
+			if (joyState.Gamepad.wButtons == XINPUT_GAMEPAD_A&&isGameOver_==true) {
+
+				isSceneEnd = true;
+			}
+		}
+	}
+
+
 
 #ifdef _DEBUG
 
@@ -133,13 +171,6 @@ void GameScene::Update() {
 	}
 #endif // _DEBUG
 
-	skydome_->Update();
-
-	player_->Update();
-
-	enemy_->Update();
-
-	ground_->Update();
 }
 
 void GameScene::Draw() {
@@ -190,9 +221,69 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	if (isGameOver_ == true) {
+		gameoverSprite_->Draw();
+	}
+	if (isGameClear_ == true) {
+		clearSprite_->Draw();
+	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::Timer() { time++;
+	if (time >= 60*20) {
+		isGameClear_ = true;
+	}
+}
+
+void GameScene::CheakAllCollisions() {
+	// 対象物A(自機)とB(敵)
+	Vector3 posA = {0};
+	Vector3 posB = {0};
+
+	// 2間点の距離
+	float posAB;
+
+	// 自キャラの半径
+	float playerRadius = 1.0f;
+
+	// 敵弾の半径
+	float enemyBulletRadius = 5.0f;
+
+#pragma region 自キャラと敵の当たり判定
+	// 自キャラのワールド座標を取得
+	    posA = player_->GetWorldPosition();
+
+		// 敵のワールド座標を取得
+		posB = enemy_->GetWorldPosition();
+
+		// AとBの距離を求める
+		posAB = (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) + (posB.z - posA.z) * (posB.z - posA.z);
+
+		float R = (playerRadius + enemyBulletRadius) * (playerRadius + enemyBulletRadius);
+
+		// 球と球との当たり判定
+	    if (posAB != 0.0f) {
+
+		if (posAB <= R) {
+			isGameOver_ = true;
+			player_->ResetPosition();
+			enemy_->ResetPosition();
+		}
+	    }
+
+}
+void GameScene::sceneReset() {
+	   
+		isGameOver_ = false;
+	    isGameClear_ = false;
+	    time = 0;
+
+	    // シーンの切り替えフラグ
+	    isSceneEnd = false;
+	   
 }

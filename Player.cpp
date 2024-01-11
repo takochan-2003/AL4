@@ -23,7 +23,7 @@ void Player::Initialize(const std::vector<Model*>& models) {
 
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
-	worldTransform_.translation_ = {0.0f, 2.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 2.0f,-50.0f};
 
 	worldTransformArm_R_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransformArm_R_.rotation_ = {0.0f, 0.0f, 0.0f};
@@ -54,8 +54,6 @@ void Player::Update() {
 	// KeyMove();
 	JoyMove();
 	UpdateFlotingGimmick();
-
-
 
 	//親と子の座標を合わせる
 	worldTransformBody_.parent_ = &worldTransform_;
@@ -103,13 +101,6 @@ void Player::ImGui() {
 		worldTransformHead_.translation_.y,
 	    worldTransformHead_.translation_.z
 	};
-
-	ImGui::Begin("Player");
-	ImGui::SliderFloat3("Head Translation", head, 100.0f, -100.0f);
-	ImGui::SliderFloat3("Larm Translation", L_arm, 100.0f, -100.0f);
-	ImGui::SliderFloat3("Rarm Translation", R_arm, 100.0f, -100.0f);
-
-	ImGui::End();
 
 	worldTransformHead_.translation_.x = head[0];
 	worldTransformHead_.translation_.y = head[1];
@@ -175,7 +166,12 @@ void Player::JoyMove() {
 	// ゲームパッド状態取得変数
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// 移動速度
-		const float kCharacterSpeed = 0.5f;
+		float kCharacterSpeed = 0.5f + movePower;
+		if (joyState.Gamepad.wButtons == XINPUT_GAMEPAD_A) {
+			movePower = 0.5f;
+		} else {
+			movePower = 0.0f;
+		}
 		Vector3 move = {
 		    (float)joyState.Gamepad.sThumbLX / SHRT_MAX * kCharacterSpeed,
 		    0.0f,
@@ -219,5 +215,11 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+void Player::ResetPosition() {
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 2.0f, -50.0f};
 }
 

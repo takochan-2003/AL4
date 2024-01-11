@@ -40,6 +40,8 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 
 Vector3 Multiply(Vector3 vector1, float k);
 
+Vector3 Multiply(Vector3 vector1, Vector3 vector2);
+
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate);
 
