@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "compute.h"
+#include "Player.h"
 
 class Enemy : public BaseCharacter {
 

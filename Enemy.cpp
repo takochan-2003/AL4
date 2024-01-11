@@ -35,9 +35,9 @@ void Enemy::Update() {
 	worldTransformArm_R_.parent_ = &worldTransformBody_;
 
 	//移動速度
-	const float speed = 2.1f;
+	const float speed = 0.1f;
 
-	worldTransform_.rotation_.y += 1.01f;
+	worldTransform_.rotation_.y += 0.01f;
 
 	//移動量
 	Vector3 move = {0.0f, 0.0f, speed};
