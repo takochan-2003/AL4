@@ -78,6 +78,8 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelNeedleL_arm_;
 	std::unique_ptr<Model> modelNeedleR_arm_;
 
+	//武器の3Dモデル
+	std::unique_ptr<Model> modelHammer_;
 
 	//スカイドーム
 	std::unique_ptr<Skydome> skydome_;

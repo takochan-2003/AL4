@@ -4,6 +4,13 @@
 #include<math.h>
 #include<ImGuimanager.h>
 
+float EaseInBack(float flame){
+	const float c1 = 1.70158f;
+	const float c3 = c1 + 1;
+
+	return c3 * flame * flame * flame - c1 * flame * flame;
+}
+
 void Player::Initialize(const std::vector<Model*>& models) {
 	//// NULLポインタチェック
 	//assert(modelBody);
@@ -36,6 +43,10 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformHead_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransformHead_.rotation_ = {0.0f, 0.0f, 0.0f};
 	worldTransformHead_.translation_ = {0.0f, 1.4f, 0.0f};
+
+	worldTransformHammer_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransformHammer_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransformHammer_.translation_ = {0.0f, 1.4f, 0.0f};
 	
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -43,33 +54,23 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformArm_L_.Initialize();
 	worldTransformBody_.Initialize();
 	worldTransformHead_.Initialize();
+	worldTransformHammer_.Initialize();
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	InitializeFloattingGimmick();
 }
 void Player::Update() {
+	switch (changeState) {
 
-	// 移動処理
-	// KeyMove();
-	JoyMove();
-	UpdateFlotingGimmick();
+	case Behavior::kRoot:
+		BehaviorRootUpdate();
+		break;
 
-
-
-	//親と子の座標を合わせる
-	worldTransformBody_.parent_ = &worldTransform_;
-	worldTransformArm_L_.parent_ = &worldTransformBody_;
-	worldTransformArm_R_.parent_ = &worldTransformBody_;
-	worldTransformHead_.parent_ = &worldTransformBody_;
-
-	//ImGui();
-
-	worldTransform_.UpdateMatrix();
-	worldTransformBody_.UpdateMatrix();
-	worldTransformHead_.UpdateMatrix();
-	worldTransformArm_R_.UpdateMatrix();
-	worldTransformArm_L_.UpdateMatrix();
+	case Behavior::kAttack:
+		BehaviorAttackUpdate();
+	break;
+	}
 
 }
 void Player::Draw(const ViewProjection& viewProjection) {
@@ -83,6 +84,9 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	models_[1]->Draw(worldTransformHead_, viewProjection);
 	models_[2]->Draw(worldTransformArm_L_, viewProjection);
 	models_[3]->Draw(worldTransformArm_R_, viewProjection);
+	if (changeState == Behavior::kAttack) {
+	models_[4]->Draw(worldTransformHammer_, viewProjection);
+	}
 
 }
 
@@ -199,7 +203,12 @@ void Player::JoyMove() {
 		}
 
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	
+	    if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+			changeState = Behavior::kAttack;
+		}
 	}
+	
 
 }
 
@@ -212,12 +221,77 @@ void Player::SetParent(const WorldTransform* parent) {
 }
 
 Vector3 Player::GetWorldPosition() {
-	Vector3 worldPos;
+	Vector3 worldPos = {};
 
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+void Player::BehaviorRootUpdate() {
+
+// 移動処理
+	// KeyMove();
+	JoyMove();
+	UpdateFlotingGimmick();
+
+	
+
+	// 親と子の座標を合わせる
+	worldTransformBody_.parent_ = &worldTransform_;
+	worldTransformArm_L_.parent_ = &worldTransformBody_;
+	worldTransformArm_R_.parent_ = &worldTransformBody_;
+	worldTransformHead_.parent_ = &worldTransformBody_;
+	worldTransformHammer_.parent_ = &worldTransformBody_;
+
+	// ImGui();
+
+	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+	worldTransformArm_R_.UpdateMatrix();
+	worldTransformArm_L_.UpdateMatrix();
+	worldTransformHammer_.UpdateMatrix();
+}
+
+void Player::BehaviorAttackUpdate() {
+	attackTime++;
+	float kDegreeToRadian = (float)M_PI / 180.0f;
+	if (attackTime <= kAttackFinishTime) {
+	
+		//イージングの変数
+	    float flame = (float)(attackTime / kAttackFinishTime);
+		float easeInBack = EaseInBack(flame * flame);
+		float weaponAngle = (float)((90 * kDegreeToRadian)) * easeInBack;
+		float armAngle = (float)((120 * kDegreeToRadian)) * easeInBack;
+
+		//イージングで動かす
+		worldTransformHammer_.rotation_.x = weaponAngle;
+		worldTransformArm_L_.rotation_.x = armAngle + (float)M_PI;
+		worldTransformArm_R_.rotation_.x = armAngle + (float)M_PI;
+	
+	} else if (attackTime >= kAttackFinishTime) {
+		panishTime++;
+		if (panishTime >= kPanishTime) {
+		attackTime = 0;
+		panishTime = 0;
+
+		worldTransformHammer_.rotation_.x = beforeHammerRotation;
+		worldTransformArm_L_.rotation_.x = beforeLarmRotation;
+		worldTransformArm_R_.rotation_.x = beforeRarmRotation;
+
+		changeState = Behavior::kRoot;
+		}
+	}
+
+	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+	worldTransformArm_R_.UpdateMatrix();
+	worldTransformArm_L_.UpdateMatrix();
+	worldTransformHammer_.UpdateMatrix();
+
 }
 
