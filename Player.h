@@ -90,6 +90,7 @@ class Player : public BaseCharacter {
 	//状態遷移
 	Behavior changeState = Behavior::kRoot;
 
+
 	//攻撃のタイマー
 	float attackTime = 0;
 	//攻撃の終了フレーム
