@@ -52,6 +52,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void TextureInitialize();
+
 	void Timer();
 
 		// 衝突判定
@@ -134,7 +136,20 @@ private: // メンバ変数
 	std::unique_ptr<FollowCamera> followCamera_;
 
 	// フェードイン
-	std::unique_ptr<FadeIn> fadeIn_;
+	std::unique_ptr<Fade> fadeIn_;
+
+	//フラグ
+	bool fadeinFlag = false;
+	bool fadeoutFlag = false;
+
+	int fadeTimer = 0;
+	bool finishFlag = false;
+
+	// ボーダーラインの体力表示
+	int32_t num1;
+	Sprite* textureNumber_[10];
+	Sprite* textureNumber2_[10];
+	Vector2 texturePos = {640, 650};
 
 	/// <summary>
 	/// ゲームシーン用

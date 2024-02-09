@@ -9,14 +9,43 @@ void TitleScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+		// ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	// ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
+	// スプライトの生成
+	sprite_ = Sprite::Create(textureHandle_, {50, 50});
+	// 3Dモデルの生成
+	model_.reset(Model::Create());
+
 	// テクスチャ
 	uint32_t textureTitle = TextureManager::Load("title.png");
 	// スプライト生成
 	spriteTitle_ =
 	    Sprite::Create(textureTitle, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+
+	// 地面
+	//   3Dモデルの生成
+	modelGround_.reset(Model::CreateFromOBJ("ground", true));
+	// 地面の生成
+	ground_ = std::make_unique<Ground>();
+	// 地面の初期化
+	ground_->Initialize(modelGround_.get());
+
+	// スカイドームの読み込み
+	modelskydome_.reset(Model::CreateFromOBJ("skydome", true));
+	// スカイドームの生成
+	skydome_ = std::make_unique<Skydome>();
+
+	skydome_->Initialize(modelskydome_.get(), textureHandle_);
 }
 
 void TitleScene::Update() {
+
+	ground_->Update();
+	skydome_->Update();
+
 	// ゲームパッドの状態を得る変数
 	XINPUT_STATE joyState;
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -52,6 +81,12 @@ void TitleScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+	// 天球の描画
+	skydome_->Draw(viewProjection_);
+
+	// 床の描画
+	ground_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -15,9 +15,6 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	
-
-
-
 	
 	// スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, {50, 50});
@@ -98,8 +95,9 @@ void GameScene::Initialize() {
 	//自キャラに追従カメラをアドレス渡し
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
-	fadeIn_ = std::make_unique<FadeIn>();
+	fadeIn_ = std::make_unique<Fade>();
 	fadeIn_->Initialize();
+
 
 #ifdef _DEBUG
 
@@ -116,6 +114,17 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	fadeIn_->Update();
+	if (fadeinFlag == false) {
+		fadeIn_->FadeInStart();
+		fadeinFlag = true;
+	}
+
+	if (finishFlag == true) {
+		fadeTimer++;
+	}
+	if (fadeTimer >= 100) {
+		isSceneEnd = true;
+	}
 
 	// ゲームパッドの状態を得る変数
 	XINPUT_STATE joyState;
@@ -140,12 +149,17 @@ void GameScene::Update() {
 			debugCamera_->Update();
 		} else if(isGameOver_==true||isGameClear_==true){
 			if (joyState.Gamepad.wButtons == XINPUT_GAMEPAD_A&&isGameOver_==true) {
-
-				isSceneEnd = true;
+				if (fadeoutFlag == false) {
+					fadeIn_->FadeOutStart();
+					fadeoutFlag = true;
+					finishFlag = true;
+				}
 			}
 		}
-	}
 
+		
+
+	}
 
 
 #ifdef _DEBUG
@@ -227,7 +241,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	
-	fadeIn_->Draw();
+
 
 	if (isGameOver_ == true) {
 		gameoverSprite_->Draw();
@@ -235,11 +249,70 @@ void GameScene::Draw() {
 	if (isGameClear_ == true) {
 		clearSprite_->Draw();
 	}
+	fadeIn_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::TextureInitialize() {
+	// 数字の画像
+	uint32_t numHandle[10];
+	numHandle[0] = TextureManager::Load("./Resources/number/0.png");
+	numHandle[1] = TextureManager::Load("./Resources/number/1.png");
+	numHandle[2] = TextureManager::Load("./Resources/number/2.png");
+	numHandle[3] = TextureManager::Load("./Resources/number/3.png");
+	numHandle[4] = TextureManager::Load("./Resources/number/4.png");
+	numHandle[5] = TextureManager::Load("./Resources/number/5.png");
+	numHandle[6] = TextureManager::Load("./Resources/number/6.png");
+	numHandle[7] = TextureManager::Load("./Resources/number/7.png");
+	numHandle[8] = TextureManager::Load("./Resources/number/8.png");
+	numHandle[9] = TextureManager::Load("./Resources/number/9.png");
+
+	// 取得した数
+	textureNumber_[0] =
+	    Sprite::Create(numHandle[0], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[1] =
+	    Sprite::Create(numHandle[1], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[2] =
+	    Sprite::Create(numHandle[2], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[3] =
+	    Sprite::Create(numHandle[3], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[4] =
+	    Sprite::Create(numHandle[4], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[5] =
+	    Sprite::Create(numHandle[5], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[6] =
+	    Sprite::Create(numHandle[6], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[7] =
+	    Sprite::Create(numHandle[7], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[8] =
+	    Sprite::Create(numHandle[8], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber_[9] =
+	    Sprite::Create(numHandle[9], {50.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+
+	textureNumber2_[0] =
+	    Sprite::Create(numHandle[0], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[1] =
+	    Sprite::Create(numHandle[1], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[2] =
+	    Sprite::Create(numHandle[2], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[3] =
+	    Sprite::Create(numHandle[3], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[4] =
+	    Sprite::Create(numHandle[4], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[5] =
+	    Sprite::Create(numHandle[5], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[6] =
+	    Sprite::Create(numHandle[6], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[7] =
+	    Sprite::Create(numHandle[7], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[8] =
+	    Sprite::Create(numHandle[8], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
+	textureNumber2_[9] =
+	    Sprite::Create(numHandle[9], {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f});
 }
 
 void GameScene::Timer() { time++;
@@ -290,6 +363,10 @@ void GameScene::sceneReset() {
 		isGameOver_ = false;
 	    isGameClear_ = false;
 	    time = 0;
+	    fadeinFlag = false;
+	    finishFlag = false;
+	    fadeoutFlag=false;
+	    fadeTimer = 0;
 
 	    // シーンの切り替えフラグ
 	    isSceneEnd = false;

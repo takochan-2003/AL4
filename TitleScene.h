@@ -9,6 +9,9 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+#include "Skydome.h"
+#include"Ground.h"
+
 class TitleScene {
 
 public: 
@@ -34,6 +37,27 @@ public:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+
+		// テクスチャハンドル
+	uint32_t textureHandle_ = 0u;
+	// 3Dモデル
+	std::unique_ptr<Model> model_;
+	// スプライト
+	Sprite* sprite_ = nullptr;
+		// スカイドーム
+	std::unique_ptr<Skydome> skydome_;
+	// スカイドームの3Dモデル
+	std::unique_ptr<Model> modelskydome_;
+
+		// 地面
+	std::unique_ptr<Ground> ground_;
+	// 3Dモデル
+	std::unique_ptr<Model> modelGround_;
+
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
 
 		// スプライト
 	Sprite* spriteTitle_ = nullptr;

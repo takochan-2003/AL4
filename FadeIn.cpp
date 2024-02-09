@@ -1,22 +1,47 @@
 ﻿#include "FadeIn.h"
-#include "TextureManager.h"
+#include <TextureManager.h>
 
-void FadeIn::Initialize() {
-	// 初期化処理
+void Fade::Initialize() {
+	// フェードの初期化
 	uint32_t fadeTexHandle = TextureManager::Load("fade.png");
 	fadeSprite_ = Sprite::Create(fadeTexHandle, {0, 0});
-	fadeColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
 }
 
-void FadeIn::Update() {
-	fadeColor_.w -= 0.003f;
-	fadeSprite_->SetColor(fadeColor_);
-}
-
-void FadeIn::Draw() { fadeSprite_->Draw(); }
-
-void FadeIn::ResetFadeIn() {
-	if (fadeColor_.w <= 0.0f) {
-		fadeColor_.w = 1.0f;
+void Fade::Update() {
+	// フェードの更新
+	// フェードイン
+	if (fadeFlag == FadeState::KFadeIn) {
+		fadeColor_.w -= 0.01f;
+		if (fadeColor_.w <= 0) {
+			fadeFlag = FadeState::kNul;
+		}
 	}
+
+	// フェードアウト
+	if (fadeFlag == FadeState::kFadeOut) {
+		fadeColor_.w += 0.01f;
+		if (fadeColor_.w >= 1) {
+			fadeFlag = FadeState::kNul;
+		}
+	}
+
+	if (fadeFlag == FadeState::kNul) {
+		fadeColor_.w = 0.0f;
+	}
+}
+
+void Fade::Draw() {
+	fadeSprite_->SetColor(fadeColor_);
+	// フェードの描画
+	fadeSprite_->Draw();
+}
+
+void Fade::FadeInStart() {
+	fadeFlag = FadeState::KFadeIn;
+	fadeColor_.w = 1.0f;
+}
+
+void Fade::FadeOutStart() {
+	fadeFlag = FadeState::kFadeOut;
+	fadeColor_.w = 0.0f;
 }
