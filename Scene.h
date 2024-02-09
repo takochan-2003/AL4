@@ -1,1 +1,5 @@
-#pragma once
+﻿﻿#pragma once
+enum class SceneType {
+	kTitle,
+	kGamePlay,
+};

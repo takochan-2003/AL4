@@ -208,3 +208,5 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
+
+void GameScene::sceneReset() {}

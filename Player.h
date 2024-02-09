@@ -52,6 +52,8 @@ class Player : public BaseCharacter {
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	int GetAttackNum() { return attackNum; }
+
 	private:
 	//カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
