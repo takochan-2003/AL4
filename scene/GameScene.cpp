@@ -242,7 +242,7 @@ void GameScene::Draw() {
 	/// </summary>
 	
 
-
+	 
 	if (isGameOver_ == true) {
 		gameoverSprite_->Draw();
 	}
