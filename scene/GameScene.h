@@ -19,6 +19,7 @@
 #include"Ground.h"
 #include"FollowCamera.h"
 #include "Scene.h"
+#include"FadeIn.h"
 
 /// <summary>
 /// ゲームシーン
@@ -131,6 +132,9 @@ private: // メンバ変数
 
 	//カメラ
 	std::unique_ptr<FollowCamera> followCamera_;
+
+	// フェードイン
+	std::unique_ptr<FadeIn> fadeIn_;
 
 	/// <summary>
 	/// ゲームシーン用

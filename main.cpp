@@ -6,6 +6,7 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "WinApp.h"
+#include"FadeIn.h"
 
 #include "TitleScene.h"
 
@@ -20,6 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	PrimitiveDrawer* primitiveDrawer = nullptr;
 	GameScene* gameScene = nullptr;
 	TitleScene* titleScene = nullptr;
+	FadeIn* fadeIn = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -67,6 +69,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// タイトルシーンの初期化
 	titleScene = new TitleScene();
 	titleScene->Initialize();
+
+	fadeIn = new FadeIn();
+	fadeIn->Initialize();
 
 	SceneType sceneNo = SceneType::kTitle;
 

@@ -98,6 +98,9 @@ void GameScene::Initialize() {
 	//自キャラに追従カメラをアドレス渡し
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
+	fadeIn_ = std::make_unique<FadeIn>();
+	fadeIn_->Initialize();
+
 #ifdef _DEBUG
 
 	// デバッグカメラの生成
@@ -111,6 +114,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	fadeIn_->Update();
 
 	// ゲームパッドの状態を得る変数
 	XINPUT_STATE joyState;
@@ -221,6 +226,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	
+	fadeIn_->Draw();
+
 	if (isGameOver_ == true) {
 		gameoverSprite_->Draw();
 	}
