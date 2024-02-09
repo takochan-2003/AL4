@@ -9,7 +9,7 @@ void Enemy::Initialize(const std::vector<Model*>& models) {
 
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
-	worldTransform_.translation_ = {0.0f, 2.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 2.0f, 4.0f};
 
 	worldTransformArm_R_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransformArm_R_.rotation_ = {0.0f, 0.0f, 0.0f};
@@ -35,20 +35,20 @@ void Enemy::Update() {
 	worldTransformArm_R_.parent_ = &worldTransformBody_;
 
 	//移動速度
-	const float speed = 0.1f;
+	//const float speed = 0.1f;
 
-	worldTransform_.rotation_.y += 0.01f;
+	//worldTransform_.rotation_.y += 0.01f;
 
-	//移動量
-	Vector3 move = {0.0f, 0.0f, speed};
+	////移動量
+	//Vector3 move = {0.0f, 0.0f, speed};
 
-	//回転行列
-	Matrix4x4 matRotY = MakeRotateYmatrix(worldTransform_.rotation_.y);
+	////回転行列
+	//Matrix4x4 matRotY = MakeRotateYmatrix(worldTransform_.rotation_.y);
 
-	//移動量を回転に合わせて回転させる
-	move = TransformNormal(move, matRotY);
-	//異ふぉう
-	worldTransform_.translation_ = Add(move, worldTransform_.translation_);
+	////移動量を回転に合わせて回転させる
+	//move = TransformNormal(move, matRotY);
+	////異ふぉう
+	//worldTransform_.translation_ = Add(move, worldTransform_.translation_);
 
 	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();

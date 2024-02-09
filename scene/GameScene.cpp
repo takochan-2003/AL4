@@ -88,6 +88,10 @@ void GameScene::Initialize() {
 	// 自キャラのワールドトランスフォームを追従カメラにセット
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
+
+	fadeIn_ = std::make_unique<FadeIn>();
+	fadeIn_->Initialize();
+
 	//自キャラに追従カメラをアドレス渡し
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
@@ -143,6 +147,8 @@ void GameScene::Update() {
 	enemy_->Update();
 
 	ground_->Update();
+
+	fadeIn_->Update();
 }
 
 void GameScene::Draw() {
@@ -182,6 +188,8 @@ void GameScene::Draw() {
 	// 床の描画
 	ground_->Draw(viewProjection_);
 
+	
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -193,6 +201,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	fadeIn_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

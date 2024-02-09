@@ -18,6 +18,7 @@
 #include "Skydome.h"
 #include"Ground.h"
 #include"FollowCamera.h"
+#include"FadeIn.h"
 
 /// <summary>
 /// ゲームシーン
@@ -90,6 +91,9 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
+
+	//フェードイン
+	std::unique_ptr<FadeIn> fadeIn_;
 
 	//自キャラ
 	std::unique_ptr<Player> player_;

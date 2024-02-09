@@ -72,6 +72,10 @@ void Player::Update() {
 	break;
 	}
 
+	ImGui::Begin("Plsyer");
+	ImGui::Text("Num:%d", attackNum);
+	ImGui::End();
+
 }
 void Player::Draw(const ViewProjection& viewProjection) {
 
@@ -205,6 +209,7 @@ void Player::JoyMove() {
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 	
 	    if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+			attackNum += 1;
 			changeState = Behavior::kAttack;
 		}
 	}

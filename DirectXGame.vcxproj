@@ -112,6 +112,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="compute.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FadeIn.cpp" />
     <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="compute.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FadeIn.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="input\Input.h" />

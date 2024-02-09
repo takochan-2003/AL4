@@ -94,12 +94,14 @@ class Player : public BaseCharacter {
 	//攻撃のタイマー
 	float attackTime = 0;
 	//攻撃の終了フレーム
-	float kAttackFinishTime = 60;
+	float kAttackFinishTime = 15;
 	//攻撃後の後隙
 	int panishTime = 0;
-	int kPanishTime = 15;
+	int kPanishTime = 3;
 	// 動かす前のrotationを保存する
 	float beforeHammerRotation = worldTransformHammer_.rotation_.x;
 	float beforeLarmRotation = worldTransformArm_L_.rotation_.x;
 	float beforeRarmRotation = worldTransformArm_R_.rotation_.x;
+
+	int attackNum = 0;
 };
